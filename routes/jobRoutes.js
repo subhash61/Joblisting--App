@@ -4,6 +4,8 @@ const authController = require('../controller/authController');
 
 const router = express.Router();
 
+router.route(`/jobs-within/:distance/center/:latlng/unit/:unit`).get(jobController.getJobsWithin);
+
 router.patch('/applyJob/:jobId', authController.protect, authController.restrictTo('user'), jobController.applyJob);
 
 router.use(authController.protect, authController.restrictTo('employer'));

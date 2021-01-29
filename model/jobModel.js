@@ -25,19 +25,30 @@ const jobSchema = new mongoose.Schema(
     expireDate: {
       type: Date,
     },
+    startLocation: {
+      //GeoJSON
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point'],
+      },
+      coordinates: [Number],
+      address: String,
+      description: String,
+    },
 
-    // locations: [
-    //   {
-    //     type: {
-    //       type: String,
-    //       default: 'Point',
-    //       enum: ['Point'],
-    //     },
-    //     coordinates: [Number],
-    //     address: String,
-    //     description: String,
-    //   },
-    // ],
+    locations: [
+      {
+        type: {
+          type: String,
+          default: 'Point',
+          enum: ['Point'],
+        },
+        coordinates: [Number],
+        address: String,
+        description: String,
+      },
+    ],
   },
   {
     toJSON: { virtuals: true },
@@ -45,6 +56,7 @@ const jobSchema = new mongoose.Schema(
   }
 );
 jobSchema.index({ user: 1 }, { unique: true });
+jobSchema.index({ startLocation: '2dsphere' });
 
 jobSchema.pre(/^find/, function (next) {
   this.populate({
