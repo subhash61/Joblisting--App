@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema({
     required: [true, 'A user must have a otp'],
     select: false,
   },
+  resume: {
+    type: String,
+    default: 'default.pdf',
+  },
 
   role: {
     type: String,

@@ -1,68 +1,81 @@
-//get all job
-//get job
-//create job
-//delete job
-//update job
 const Job = require('../model/jobModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
-exports.getAllProducts = catchAsync(async (req, res, next) => {
-  const products = await Product.find();
+exports.getAllJobs = catchAsync(async (req, res, next) => {
+  const jobs = await Job.find();
   res.status(200).json({
     status: 'success',
     data: {
-      products,
+      jobs,
     },
   });
 });
-exports.getProduct = catchAsync(async (req, res, next) => {
-  const product = await Product.findById(req.params.productId);
-  console.log(product);
-  if (!product) {
-    console.log('abcd');
-    return next(new AppError('No Product found with that id', 404));
+exports.getJob = catchAsync(async (req, res, next) => {
+  const job = await Job.findById(req.params.jobId);
+  if (!job) {
+    return next(new AppError('No Job found with that id', 404));
   }
   res.status(200).json({
     status: 'success',
     data: {
-      product,
+      job,
     },
   });
 });
 
-exports.createProduct = catchAsync(async (req, res) => {
-  // console.log(req.body);
-  const product = await Product.create(req.body);
+exports.createJob = catchAsync(async (req, res) => {
+  const newJob = await Job.create(req.body);
+  console.log(Date.now());
   res.status(201).json({
     status: 'success',
     data: {
-      product,
+      newJob,
     },
   });
 });
 
-exports.deleteProduct = catchAsync(async (req, res, next) => {
-  const product = await Product.findByIdAndDelete(req.params.productId);
-  if (!product) {
-    return next(new AppError('No Product found with that id', 404));
+exports.deleteJob = catchAsync(async (req, res, next) => {
+  const job = await Job.findByIdAndDelete(req.params.jobId);
+  if (!job) {
+    return next(new AppError('No Job found with that id', 404));
   }
   res.status(204).json({
     status: 'sucess',
     data: null,
   });
 });
-exports.updateProduct = catchAsync(async (req, res, next) => {
-  const updatedProduct = await Product.findByIdAndUpdate(req.params.productId, req.body, {
+exports.updateJob = catchAsync(async (req, res, next) => {
+  const updatedJob = await Job.findByIdAndUpdate(req.params.jobId, req.body, {
     new: true,
     runValidators: true,
   });
-  if (!updatedProduct) {
-    return next(new AppError('No Product found with that id', 404));
+  if (!updatedJob) {
+    return next(new AppError('No Job found with that id', 404));
   }
 
   res.status(200).json({
     status: 'sucess',
-    data: updatedProduct,
+    data: updatedJob,
+  });
+});
+
+exports.applyJob = catchAsync(async (req, res) => {
+  const userId = req.user.id;
+  const { jobId } = req.params;
+  const job = await Job.findByIdAndUpdate(
+    jobId,
+    { $push: { user: userId } },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  res.status(201).json({
+    status: 'success',
+    data: {
+      job,
+    },
   });
 });
