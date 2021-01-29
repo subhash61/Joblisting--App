@@ -33,13 +33,13 @@ const createSendToken = (user, statusCode, req, res) => {
 };
 
 exports.login = catchAsync(async (req, res, next) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    return next(new AppError('Please provide email and password', 400));
+  const { email, otp } = req.body;
+  if (!email || !otp) {
+    return next(new AppError('Please provide email and otp', 400));
   }
-  const user = await User.findOne({ email }).select('+password');
-  if (!user || (await user.correctPassword(user.password, password))) {
-    return next(new AppError('user email or password is incorrect', 401));
+  const user = await User.findOne({ email });
+  if (!user) {
+    return next(new AppError('user email is invalid', 401));
   }
 
   createSendToken(user, 200, req, res);
@@ -53,6 +53,16 @@ exports.logout = (req, res) => {
   res.status(200).json({
     status: 'success',
   });
+};
+
+exports.restrictTo = (...roles) => {
+  return (req, res, next) => {
+    // roles = [admin, lead-guide] role = 'user'
+    if (!roles.includes(req.user.role)) {
+      next(new AppError('you are not authorised to perform this action', 403));
+    }
+    next();
+  };
 };
 
 exports.protect = catchAsync(async (req, res, next) => {
