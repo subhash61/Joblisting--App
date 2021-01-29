@@ -9,7 +9,9 @@ router.post(`/signup`, authController.signup);
 router.get(`/logout`, authController.logout);
 
 router.use(authController.protect);
-router.patch(`/updateMe`, userController.updateMe);
+router.patch(`/updateMe`, userController.uploadUserResume, userController.updateMe);
+router.post('/uploadResume', userController.uploadUserResume);
+
 router.get(`/me`, userController.getMe, userController.getUser);
 
 router.use(authController.restrictTo('admin'));

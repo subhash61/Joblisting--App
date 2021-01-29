@@ -1,9 +1,13 @@
 const express = require('express');
+const path = require('path');
 const userRouter = require('./routes/userRoutes');
 const jobRouter = require('./routes/jobRoutes');
 const globalErrorHandler = require('./controller/errorController');
 
 const app = express();
+
+app.use(express.static(path.join(__dirname, `public`)));
+app.use(express.static(path.join(__dirname, `dist`)));
 
 app.use(express.json());
 
