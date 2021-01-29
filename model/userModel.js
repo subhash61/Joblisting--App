@@ -20,24 +20,37 @@ const userSchema = new mongoose.Schema({
     required: [true, 'A user must have a otp'],
     select: false,
   },
+  password: {
+    type: String,
+    required: [true, 'A user must have a password'],
+    minlength: 8,
+    select: false,
+  },
+  passwordConfirm: {
+    type: String,
+    required: [true, 'A user must confirm password'],
+    validate: {
+      //This only works on . create and save
+      validator: function (el) {
+        return el === this.password;
+      },
+    },
+  },
   role: {
     type: String,
-    enum: ['user'],
+    enum: ['user', 'employer'],
     default: 'user',
   },
 });
 
 userSchema.pre('save', async function (next) {
-  // if (!this.isModified('otp')) return next();
+  //Hash the password at the cost of 12
+  this.password = await bcrypt.hash(this.password, 12);
 
-  this.otp = await bcrypt.hash(this.otp, 12);
-
+  //delete passwordConfirm from the database
+  this.passwordConfirm = undefined;
   next();
 });
-
-userSchema.methods.correctPassword = async function (userOtp, candidateOtp) {
-  return await bcrypt.compare(userOtp, candidateOtp);
-};
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;
