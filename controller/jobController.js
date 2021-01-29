@@ -26,7 +26,6 @@ exports.getJob = catchAsync(async (req, res, next) => {
 
 exports.createJob = catchAsync(async (req, res) => {
   const newJob = await Job.create(req.body);
-  console.log(Date.now());
   res.status(201).json({
     status: 'success',
     data: {
@@ -60,10 +59,22 @@ exports.updateJob = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.applyJob = catchAsync(async (req, res) => {
+exports.applyJob = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
   const { jobId } = req.params;
-  const job = await Job.findByIdAndUpdate(
+  let job = await Job.findById(jobId);
+  const jobTimeStamp = parseInt(job.expireDate.getTime(), 10);
+  if (Date.now() > jobTimeStamp) {
+    return next(new AppError('Applying to this job has expired', 400));
+  }
+  job.user.forEach((el) => {
+    // eslint-disable-next-line eqeqeq
+    if (el._id == userId) {
+      return next(new AppError('You have applied once', 400));
+    }
+  });
+
+  job = await Job.findByIdAndUpdate(
     jobId,
     { $push: { user: userId } },
     {
@@ -71,7 +82,6 @@ exports.applyJob = catchAsync(async (req, res) => {
       runValidators: true,
     }
   );
-
   res.status(201).json({
     status: 'success',
     data: {
