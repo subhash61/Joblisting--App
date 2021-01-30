@@ -8,9 +8,11 @@ router.route(`/jobs-within/:distance/center/:latlng/unit/:unit`).get(jobControll
 
 router.patch('/applyJob/:jobId', authController.protect, authController.restrictTo('user'), jobController.applyJob);
 
+router.route('/').get(jobController.getAllJobs);
+
 router.use(authController.protect, authController.restrictTo('employer'));
 
-router.route('/').get(jobController.getAllJobs).post(jobController.createJob);
+router.route('/').post(jobController.createJob);
 
 router.route('/:jobId').get(jobController.getJob).delete(jobController.deleteJob).patch(jobController.updateJob);
 

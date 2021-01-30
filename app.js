@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const compression = require('compression');
+const cookieParser = require('cookie-parser');
 
 const userRouter = require('./routes/userRoutes');
 const jobRouter = require('./routes/jobRoutes');
@@ -17,6 +18,7 @@ app.use(express.static(path.join(__dirname, `public`)));
 app.use(express.static(path.join(__dirname, `dist`)));
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/jobs', jobRouter);

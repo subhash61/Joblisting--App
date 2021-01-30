@@ -25,17 +25,6 @@ const jobSchema = new mongoose.Schema(
     expireDate: {
       type: Date,
     },
-    startLocation: {
-      //GeoJSON
-      type: {
-        type: String,
-        default: 'Point',
-        enum: ['Point'],
-      },
-      coordinates: [Number],
-      address: String,
-      description: String,
-    },
 
     locations: [
       {
@@ -45,8 +34,7 @@ const jobSchema = new mongoose.Schema(
           enum: ['Point'],
         },
         coordinates: [Number],
-        address: String,
-        description: String,
+        name: String,
       },
     ],
   },

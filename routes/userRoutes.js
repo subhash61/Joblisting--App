@@ -9,9 +9,8 @@ router.post(`/signup`, authController.signup);
 router.get(`/logout`, authController.logout);
 router.route('/sendOTP').post(authController.sendOTP);
 
-router.use(authController.protect);
-router.patch(`/updateMe`, userController.uploadUserResume, userController.updateMe);
-router.post('/uploadResume', authController.restrictTo('user'), userController.uploadUserResume);
+router.patch(`/updateMe`, userController.updateMe);
+router.post('/uploadResume', authController.protect, userController.uploadUserResume);
 
 router.get(`/me`, userController.getMe, userController.getUser);
 
