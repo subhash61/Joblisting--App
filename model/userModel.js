@@ -16,8 +16,6 @@ const userSchema = new mongoose.Schema({
   },
   otp: {
     type: Number,
-    required: [true, 'A user must have a otp'],
-    select: false,
   },
   resume: {
     type: String,
@@ -27,6 +25,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum: ['user', 'employer'],
     default: 'user',
+  },
+  expiresAt: {
+    type: Number,
+    select: false,
   },
 });
 

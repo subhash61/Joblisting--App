@@ -7,6 +7,7 @@ const authController = require('../controller/authController');
 router.post(`/login`, authController.login);
 router.post(`/signup`, authController.signup);
 router.get(`/logout`, authController.logout);
+router.route('/sendOTP').post(authController.sendOTP);
 
 router.use(authController.protect);
 router.patch(`/updateMe`, userController.uploadUserResume, userController.updateMe);

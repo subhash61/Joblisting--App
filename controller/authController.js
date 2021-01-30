@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../model/userModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
-// const Email = require('../utils/email');
+const Email = require('../utils/email');
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -35,12 +35,35 @@ exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
     name: req.body.name,
     email: req.body.email,
-    otp: req.body.otp,
   });
   // const url = `${req.protocol}://${req.get('host')}/me`;
   //console.log(url);
   // await new Email(newUser, url).sendWelcome();
   createSendToken(newUser, 201, req, res);
+});
+exports.sendOTP = catchAsync(async (req, res, next) => {
+  const { email } = req.body;
+
+  if (!email) {
+    next(new AppError('Please provide email.', 400));
+  }
+
+  const randomNumber = Math.trunc(Math.random() * 1000000);
+  const timeStamp = Date.now() + 10 * 60 * 1000;
+
+  const user = await User.findOneAndUpdate(
+    { email },
+    { otp: randomNumber, expiresAt: timeStamp },
+    {
+      new: true,
+    }
+  );
+  new Email(user, randomNumber).sendOTP();
+
+  res.status(200).json({
+    status: 'success',
+    message: 'OTP sent successfully',
+  });
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -53,6 +76,14 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!user) {
     return next(new AppError('user email is invalid', 401));
   }
+  if (Date.now() > user.expiresAt) {
+    return next(new AppError('Your OTP has expired. Please try again!', 400));
+  }
+  if (Number(otp) !== user.otp) {
+    return next(new AppError('Entered OTP is invalid. Please try again', 400));
+  }
+  user.otp = undefined;
+  user.save();
 
   createSendToken(user, 200, req, res);
 });
@@ -100,10 +131,6 @@ exports.protect = catchAsync(async (req, res, next) => {
     return next(new AppError(`the user belonging to the token doesn't exist`, 401));
   }
 
-  //4. check if user changed password after the token was issued
-  // if (currentUser.changedPasswordAfter(decoded.iat)) {
-  //   return next(new AppError('User recently changed password| Please log in again', 401));
-  // }
   // // GRANT ACCESS TO PROTECTED ROUTE
   req.user = currentUser;
   next();
