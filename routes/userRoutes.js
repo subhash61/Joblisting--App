@@ -11,7 +11,7 @@ router.route('/sendOTP').post(authController.sendOTP);
 
 router.use(authController.protect);
 router.patch(`/updateMe`, userController.uploadUserResume, userController.updateMe);
-router.post('/uploadResume', userController.uploadUserResume);
+router.post('/uploadResume', authController.restrictTo('user'), userController.uploadUserResume);
 
 router.get(`/me`, userController.getMe, userController.getUser);
 
