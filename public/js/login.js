@@ -1,11 +1,23 @@
-//eslint-disabled
 import axios from 'axios';
 
-export const login = async (email) => {
+export const sendOTP = async (email) => {
   const res = await axios({
     method: 'POST',
-    url: '/api/v1/users/sendOTP',
+    url: 'http://127.0.0.1:3000/api/v1/users/sendOTP',
     data: {
+      email,
+    },
+  });
+
+  // window.location.assign('http://127.0.0.1:3000/login')
+};
+
+export const login = async (otp, email) => {
+  const res = await axios({
+    method: 'POST',
+    url: 'http://127.0.0.1:3000/api/v1/users/login',
+    data: {
+      otp,
       email,
     },
   });
