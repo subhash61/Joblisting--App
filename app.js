@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 const userRouter = require('./routes/userRoutes');
 const jobRouter = require('./routes/jobRoutes');
@@ -11,6 +12,10 @@ const globalErrorHandler = require('./controller/errorController');
 const app = express();
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
+
+app.use(cors());
+
+app.options('*', cors());
 
 app.use(compression());
 
