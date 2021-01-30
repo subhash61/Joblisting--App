@@ -27,7 +27,7 @@ module.exports = class Email {
       text: htmlToText.fromString(html),
     };
     mg.messages().send(mailOptions, function (error, body) {
-      console.log(body);
+      // eslint-disable-next-line no-console
       console.log('OTP sent successfully!!');
     });
   }

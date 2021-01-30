@@ -5,7 +5,9 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './config.env' });
 
 process.on('uncaughtException', (err) => {
+  // eslint-disable-next-line no-console
   console.log('UNCAUGHT EXCEPTION !!! ');
+  // eslint-disable-next-line no-console
   console.log(err.name, err.message);
   process.exit(1);
 });
@@ -20,6 +22,7 @@ mongoose
     useFindAndModify: false,
     useUnifiedTopology: true,
   })
+  // eslint-disable-next-line no-console
   .then(() => console.log('DB connection is successful'));
 
 const port = process.env.PORT || 3000;
@@ -29,7 +32,9 @@ const server = app.listen(port, () => {
 });
 
 process.on('unhandledRejection', (err) => {
+  // eslint-disable-next-line no-console
   console.log(err.name, err.message);
+  // eslint-disable-next-line no-console
   console.log('UNHANDLED REJECTION !!! Shutting down....');
   server.close(() => {
     process.exit(1);

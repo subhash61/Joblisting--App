@@ -36,9 +36,6 @@ exports.signup = catchAsync(async (req, res, next) => {
     name: req.body.name,
     email: req.body.email,
   });
-  // const url = `${req.protocol}://${req.get('host')}/me`;
-  //console.log(url);
-  // await new Email(newUser, url).sendWelcome();
   createSendToken(newUser, 201, req, res);
 });
 exports.sendOTP = catchAsync(async (req, res, next) => {
