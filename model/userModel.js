@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema({
   },
   otp: {
     type: Number,
+    select: true,
   },
   resume: {
     type: String,

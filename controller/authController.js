@@ -97,6 +97,7 @@ exports.logout = (req, res) => {
 
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
+    console.log('restricTo');
     // roles = [admin, lead-guide] role = 'user'
     if (!roles.includes(req.user.role)) {
       next(new AppError('you are not authorised to perform this action', 403));
@@ -106,6 +107,7 @@ exports.restrictTo = (...roles) => {
 };
 
 exports.protect = catchAsync(async (req, res, next) => {
+  console.log('protect');
   //1. getting token and check if it's there
   let token;
 

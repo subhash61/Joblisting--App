@@ -1,12 +1,14 @@
 nav.navbar
   ul.nav__list
     li.nav__item--link
-      a.nav__link(href='#') NEARBY JOBS
+      if user.role === 'user'
+        a.nav__link.geo__jobs(href="#") NEARBY JOBS
+      else
+        a.nav__link(href="/applicants") VIEW APPLICANTS    
     li.nav_item
-      img.nav__logo(src='./image/logo-white.png' alt='Brand-logo')
+      img.nav__logo(src="/image/logo-white.png" alt="Brand-logo")
     .nav__buttons
       li.nav__item
         button.nav__btn.nav__btn--1 PROFILE
-      //-  <li class="nav__item"><a href="http://127.0.0.1:5500/public/profile.html" class="nav__btn nav__btn--1">PROFILE</a></li>
       li.nav__item
         button.nav__btn.nav__btn--2 LOGOUT

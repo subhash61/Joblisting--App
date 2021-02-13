@@ -4,20 +4,21 @@ block content
 
   .list__jobs
     each job in jobs
-      .job
-        h1(data-job-id=`${job._id}`).company__name= `${job.companyName}`
+      .job.job__template(data-job-id=`${job._id}`)
+        h1.company__name#company__name= `${job.companyName}`
         .job__description
           p.job__element
-            span.span__element=`position ${job.title}` 
+            span.span__element=`position: ${job.title}` 
             | 
           p.job__element
-            span.span__element=`expiration ${job.expireDate}` 
+          -const date = new Date(Date.now() + job.expiry * 24 * 60 * 60 * 1000).toLocaleString('en-us', {month: 'long', year: 'numeric', day: 'numeric', weekday: 'short' })
+            span.span__element=`expiration: ${date}` 
             |  
           p.job__element
-            span.span__element=`location ${job.locations[0].name}` 
+            span.span__element=`location: ${job.locationName}` 
             |  
         p.job__element.job__summary
-          span.span__element=`description ${job.description}` 
+          span.span__element=`description: ${job.description}` 
             | 
         .upload
           form.job__form

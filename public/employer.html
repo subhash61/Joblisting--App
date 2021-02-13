@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,15 +10,16 @@
 
     <title>Document</title>
 </head>
+
 <body>
     <nav class="navbar">
         <ul class="nav__list">
             <!-- <li class="nav__item--link"><a href="#" class="nav__link">NEARBY JOBS</a></li> -->
             <li class="nav_item"><img class="nav__logo" src="./image/logo-white.png" alt="Brand-logo"></li>
             <div class="nav__buttons">
-             <li class="nav__item"><button class="nav__btn nav__btn--1">PROFILE</button></li>
-             <!-- <li class="nav__item"><a href="http://127.0.0.1:5500/public/profile.html" class="nav__btn nav__btn--1"></a></li> -->
-             <li class="nav__item"><button class="nav__btn nav__btn--2">LOGOUT</button></li>
+                <li class="nav__item"><button class="nav__btn nav__btn--1">PROFILE</button></li>
+                <!-- <li class="nav__item"><a href="http://127.0.0.1:5500/public/profile.html" class="nav__btn nav__btn--1"></a></li> -->
+                <li class="nav__item"><button class="nav__btn nav__btn--2">LOGOUT</button></li>
             </div>
         </ul>
     </nav>
@@ -28,7 +30,8 @@
 
             <div class="employer__form">
                 <label class="profile__label login__label employer__label" for="name">Company Name: </label>
-                <input class="profile__input employer__input" type="text" placeholder="ex: Accenture" id="name">
+                <input class="profile__input employer__input" required='true' type="text" placeholder="ex: Accenture"
+                    id="name">
             </div>
             <div class="employer__form">
                 <label class="profile__label login__label employer__label" for="position">Position: </label>
@@ -44,10 +47,11 @@
             </div>
             <div class="employer__form">
                 <label class="profile__label login__label employer__label" for="description">Description: </label>
-                <textarea  class="profile__input employer__input" id="description" cols="60" rows="10"></textarea>
+                <textarea class="profile__input employer__input" id="description" cols="60" rows="10"></textarea>
             </div>
             <button class="submit__btn employer__submit">submit</button>
         </form>
     </div>
 </body>
+
 </html>

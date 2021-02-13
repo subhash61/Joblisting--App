@@ -28,7 +28,6 @@ app.use(cookieParser());
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/jobs', jobRouter);
 app.use('/', viewRouter);
-
 app.use(globalErrorHandler);
 
 module.exports = app;

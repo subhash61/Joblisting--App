@@ -6,11 +6,11 @@ const router = express.Router();
 
 router.route(`/jobs-within/:distance/center/:latlng/unit/:unit`).get(jobController.getJobsWithin);
 
-router.patch('/applyJob/:jobId', authController.protect, authController.restrictTo('user'), jobController.applyJob);
+router.patch('/applyJob/:jobId', authController.protect, jobController.applyJob);
 
 router.route('/').get(jobController.getAllJobs);
 
-router.use(authController.protect, authController.restrictTo('employer'));
+// router.use(authController.protect, authController.restrictTo('employer'));
 
 router.route('/').post(jobController.createJob);
 

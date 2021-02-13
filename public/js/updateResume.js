@@ -5,13 +5,13 @@ export const updateResume = async (data) => {
     const url = '/api/v1/users/uploadResume';
 
     const res = await axios({
-      method: 'PATCH',
+      method: 'POST',
       url,
       data,
     });
     console.log(res);
   } catch (err) {
-    console.log(err.response.data.message);
+    console.log(err.response);
   }
 };
 export const uploadUser = async (jobId) => {
@@ -27,6 +27,6 @@ export const uploadUser = async (jobId) => {
       window.alert('Applied added successfully');
     }
   } catch (err) {
-    console.log(err.response.data.message);
+    window.alert(err.response.data.message);
   }
 };

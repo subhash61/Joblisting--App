@@ -1,20 +1,42 @@
+const fs = require('fs');
 const multer = require('multer');
 const User = require('../model/userModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const APIFeatures = require('../utils/apiFeatures');
 
+// const deleteResume = (req) => {
+// const resume = fs.readdirSync('./public/users/resume');
+// const el = resume.find((el) => el.split('-')[1] === req.user.id);
+// if (el) {
+//   fs.unlink(`./public/users/resume/${el}`, function);
+// }
+// };
+
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
+    // eslint-disable-next-line no-console
+    console.log('multerStorage');
+
     cb(null, 'public/users/resume');
   },
   filename: (req, file, cb) => {
     const ext = file.mimetype.split('/')[1];
+    // deleteResume(req);
     cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
   },
 });
 const multerFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('application')) {
+  const fileId = [];
+  fs.readdir('./public/users/resume', (err, files) => {
+    files.forEach((el) => {
+      fileId.push(el.split('-')[1]);
+    });
+
+    console.log('fileId:', fileId);
+  });
+  console.log('multerFilter');
+  if (file.mimetype.startsWith('application/pdf')) {
     cb(null, true);
   } else {
     cb(new AppError('Not pdf! Please upload resume in pdf format.', 400), false);

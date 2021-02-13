@@ -20,3 +20,16 @@ exports.renderEmployer = catchAsync(async (req, res, next) => {
     title: 'Employer',
   });
 });
+
+exports.renderProfile = catchAsync(async (req, res, next) => {
+  const { user } = req;
+
+  res.status(200).render('profile', {
+    title: 'Profile',
+  });
+});
+// exports.renderEmployerProfile = catchAsync(async (req, res, next) => {
+//   res.status(200).render('profile', {
+//     title: 'Profile',
+//   });
+// });

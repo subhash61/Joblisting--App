@@ -26,6 +26,7 @@ exports.getJob = catchAsync(async (req, res, next) => {
 
 exports.createJob = catchAsync(async (req, res) => {
   const newJob = await Job.create(req.body);
+
   res.status(201).json({
     status: 'success',
     data: {
@@ -63,16 +64,21 @@ exports.applyJob = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
   const { jobId } = req.params;
   let job = await Job.findById(jobId);
-  const jobTimeStamp = parseInt(job.expireDate.getTime(), 10);
+
+  const jobTimeStamp = Date.now() + job.expiry * 24 * 60 * 60 * 1000;
   if (Date.now() > jobTimeStamp) {
     return next(new AppError('Applying to this job has expired', 400));
   }
+  let state = false;
   job.user.forEach((el) => {
     // eslint-disable-next-line eqeqeq
     if (el._id == userId) {
-      return next(new AppError('You have applied once', 400));
+      state = true;
     }
   });
+  if (state) {
+    return next(new AppError('You have applied once', 400));
+  }
 
   job = await Job.findByIdAndUpdate(
     jobId,
